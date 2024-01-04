@@ -24,37 +24,58 @@ public class Node : MonoBehaviour
 
     private void OnMouseDown()
     {
-        //Debug.Log("Node clicked");
         points.Clear();
-        List<GameObject> nodes = new List<GameObject>();
+        List<GameObject> stars = new List<GameObject>();
 
         foreach (Direction direction in Enum.GetValues(typeof(Direction)))
         {
             Vector3Int dir = GridCellManager.instance.GetDirection(direction);
             Vector3Int startPos = GridCellManager.instance.GetObjCell(transform.position);
-            GameObject node = NodeDetector(startPos, dir);
-            if(node != null)
+            GameObject star = StarDetector(startPos, dir);
+            if(star != null)
             {
-                nodes.Add(node);
+                stars.Add(star);
             }
         }
 
-        if(nodes.Count > 0)
-        {
-            foreach (GameObject node in nodes)
-            {
-                node.transform.DOMove(transform.position, 0.5f);
-            }
-            int totalPoints = points.Count;
-            for(int i = 0; i < totalPoints; i++)
-            {
-                Destroy(points[i]);
-            }
-        }
+        StarsManager(stars);
     }
 
+    private void StarsManager(List<GameObject> stars)
+    {
+        int totalStars = stars.Count;
+        int totalPoints = points.Count;
+        Transform pointContainer = this.transform.parent;
 
-    private GameObject NodeDetector(Vector3Int startPos, Vector3Int direction)
+        if (totalStars > 0)
+        {
+            if(totalStars == 2 && pointContainer.childCount != 1)
+            {
+                return;
+            }
+
+            for (int i = 0; i < totalStars; i++)
+            {
+                GameObject star = stars[i];
+                star.GetComponent<Collider2D>().enabled = false;
+                star.transform.DOMove(transform.position, 0.5f).OnComplete(() =>
+                {
+                    star.GetComponent<Collider2D>().enabled = true;
+                });
+            }
+            for (int i = 0; i < totalPoints; i++)
+            {
+                if (!IsStarNearBy(points[i].transform.position))
+                {
+                    WaysManager.instance.RemovePoint(points[i]);
+                    Destroy(points[i]);
+                }
+            }
+        }
+
+    }
+
+    private GameObject StarDetector(Vector3Int startPos, Vector3Int direction)
     {
         List<GameObject> linkedNodes = new List<GameObject>();
 
@@ -95,6 +116,29 @@ public class Node : MonoBehaviour
         return null;
     }
 
+
+    public bool IsStarNearBy(Vector3 positionToCheck)
+    {
+        Vector3Int cellPos = GridCellManager.instance.GetObjCell(positionToCheck);
+        foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+        {
+            Vector3Int dir = GridCellManager.instance.GetDirection(direction);
+            Vector3Int checkPos = cellPos + dir;
+
+            if(CheckLinkedNode(cellPos, checkPos))
+            {
+                Collider2D collider2D = Physics2D.OverlapPoint(GridCellManager.instance.PositonToMove(checkPos));
+                if (collider2D != null && collider2D.gameObject.CompareTag("Star"))
+                {
+                    GameObject checkingPoint = WaysManager.instance.GetPlacedPoint(checkPos);
+                    GameObject startPoint = WaysManager.instance.GetPlacedPoint(cellPos);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private bool CheckLinkedNode(Vector3Int startPos, Vector3Int checkPos)
     {
         GameObject checkingPoint = WaysManager.instance.GetPlacedPoint(checkPos);
@@ -111,4 +155,5 @@ public class Node : MonoBehaviour
         }
         return false;
     }
+
 }
