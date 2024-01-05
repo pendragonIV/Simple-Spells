@@ -11,7 +11,9 @@ public class WaysManager : MonoBehaviour
     [SerializeField]
     private Transform waysContainer;
     [SerializeField]
-    private Transform centerCellsContainer;
+    private Transform pointsContainer;
+    [SerializeField]
+    private Transform starsContainer;
 
     private Dictionary<Vector3Int, GameObject> placedPoint;
 
@@ -29,20 +31,36 @@ public class WaysManager : MonoBehaviour
         placedPoint = new Dictionary<Vector3Int, GameObject>();
     }
 
-    private void Start()
+    public void SetContainer(Transform pointsContainer, Transform waysContainer, Transform starsContainer)
     {
-        foreach (Transform child in centerCellsContainer)
+        this.pointsContainer = pointsContainer;
+        this.waysContainer = waysContainer;
+        this.starsContainer = starsContainer;
+        SetUp();
+    }
+
+    public void SetUp()
+    {
+        foreach (Transform child in pointsContainer)
         {
             child.GetComponent<CenterCell>().SetCenter();
         }
 
-        foreach (Transform child in centerCellsContainer)
+        foreach (Transform child in pointsContainer)
         {
             Node node = child.GetComponent<Node>();
             foreach (GameObject linkedNode in node.GetLinkedNodes())
             {
                 SpawnWay(child.position, linkedNode.transform.position);
             }
+        }
+    }
+
+    public void CheckStar(GameObject star)
+    {
+        if(pointsContainer.childCount <= 3)
+        {
+            star.GetComponent<Star>().LightStar();
         }
     }
 
@@ -64,14 +82,18 @@ public class WaysManager : MonoBehaviour
         }
     }
 
-    public void AddPlacedPoint(Vector3Int cellPos, GameObject point)
+    public int GetNumberOfPoints()
     {
-        placedPoint.Add(cellPos, point);
+        return pointsContainer.childCount;
     }
 
-    public void RemovePlacedPoint(Vector3Int cellPos)
+    public void AddPlacedPoint(Vector3Int cellPos, GameObject point)
     {
-        placedPoint.Remove(cellPos);
+        if (placedPoint.ContainsKey(cellPos))
+        {
+            placedPoint.Remove(cellPos);
+        }
+        placedPoint.Add(cellPos, point);
     }
 
     public void RemovePoint(GameObject point)
@@ -93,5 +115,13 @@ public class WaysManager : MonoBehaviour
     public GameObject GetPlacedPoint(Vector3Int cellPos)
     {
         return placedPoint.ContainsKey(cellPos) ? placedPoint[cellPos] : null;
+    }
+
+    public void DestroyPoints()
+    {
+        if(pointsContainer.gameObject.activeSelf)
+        {
+            pointsContainer.gameObject.SetActive(false);
+        }
     }
 }

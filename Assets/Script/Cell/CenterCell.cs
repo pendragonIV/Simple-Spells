@@ -24,7 +24,6 @@ public class CenterCell : MonoBehaviour
             {
                 WaysManager.instance.RemovePoint(this.gameObject);
             }
-
             WaysManager.instance.AddPlacedPoint(cellPos, this.gameObject);
         }
 

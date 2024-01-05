@@ -13,63 +13,43 @@ MonoBehaviour:
   m_Name: LevelData
   m_EditorClassIdentifier: 
   levels:
-  - map: {fileID: 0}
-    playerSpawnPosition: {x: 0, y: 0}
-    timeLimit: 0
-    achivement: 0
+  - map: {fileID: 6366365441236484563, guid: 18e2a936a12430c4293b6e33c88da1b4, type: 3}
+    moves: 1
     isCompleted: 0
     isPlayable: 1
-  - map: {fileID: 0}
-    playerSpawnPosition: {x: 0, y: 0}
-    timeLimit: 0
-    achivement: 0
+  - map: {fileID: 4797000444962951453, guid: 9fc34011ed25ca44d89970c04ff7f206, type: 3}
+    moves: 4
+    isCompleted: 0
+    isPlayable: 1
+  - map: {fileID: 237702276942097354, guid: 4c11233997c640e43bd6d1b113dbc8d8, type: 3}
+    moves: 5
+    isCompleted: 0
+    isPlayable: 1
+  - map: {fileID: 6651977007117464962, guid: 4e1db1c644e33b146b058fcb29df5552, type: 3}
+    moves: 4
+    isCompleted: 0
+    isPlayable: 1
+  - map: {fileID: 7344796376084825165, guid: c2663118659131c46a6b8fa06b151b24, type: 3}
+    moves: 7
+    isCompleted: 0
+    isPlayable: 1
+  - map: {fileID: 8681581088812449235, guid: 440574bfaec514344b648814fe032180, type: 3}
+    moves: 0
+    isCompleted: 0
+    isPlayable: 1
+  - map: {fileID: 3170652447214469139, guid: a2e8c8ddcb8a06040a5d407e2e015820, type: 3}
+    moves: 0
     isCompleted: 0
     isPlayable: 0
-  - map: {fileID: 0}
-    playerSpawnPosition: {x: 0, y: 0}
-    timeLimit: 0
-    achivement: 0
+  - map: {fileID: 3070183097729303564, guid: 0b0e6cea093e54d45be48d18d6ed9141, type: 3}
+    moves: 0
     isCompleted: 0
     isPlayable: 0
-  - map: {fileID: 0}
-    playerSpawnPosition: {x: 0, y: 0}
-    timeLimit: 0
-    achivement: 0
+  - map: {fileID: 7906128017105327310, guid: a2bc2b6486ecc3c41927c384123d9888, type: 3}
+    moves: 0
     isCompleted: 0
     isPlayable: 0
-  - map: {fileID: 0}
-    playerSpawnPosition: {x: 0, y: 0}
-    timeLimit: 0
-    achivement: 0
-    isCompleted: 0
-    isPlayable: 0
-  - map: {fileID: 0}
-    playerSpawnPosition: {x: 0, y: 0}
-    timeLimit: 0
-    achivement: 0
-    isCompleted: 0
-    isPlayable: 0
-  - map: {fileID: 0}
-    playerSpawnPosition: {x: 0, y: 0}
-    timeLimit: 0
-    achivement: 0
-    isCompleted: 0
-    isPlayable: 0
-  - map: {fileID: 0}
-    playerSpawnPosition: {x: 0, y: 0}
-    timeLimit: 0
-    achivement: 0
-    isCompleted: 0
-    isPlayable: 0
-  - map: {fileID: 0}
-    playerSpawnPosition: {x: 0, y: 0}
-    timeLimit: 0
-    achivement: 0
-    isCompleted: 0
-    isPlayable: 0
-  - map: {fileID: 0}
-    playerSpawnPosition: {x: 0, y: 0}
-    timeLimit: 0
-    achivement: 0
+  - map: {fileID: 3195419683867131109, guid: 7f968252388faec4cbec67191449c232, type: 3}
+    moves: 0
     isCompleted: 0
     isPlayable: 0

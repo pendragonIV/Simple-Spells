@@ -21,11 +21,10 @@ public class LevelData : ScriptableObject
         return levels;
     }
 
-    public void SetLevelData(int levelIndex, bool isPlayable, bool isCompleted, int achivement)
+    public void SetLevelData(int levelIndex, bool isPlayable, bool isCompleted)
     {
         levels[levelIndex].isPlayable = isPlayable;
         levels[levelIndex].isCompleted = isCompleted;
-        levels[levelIndex].achivement = achivement;
     }
 
     #region Save and Load
@@ -81,17 +80,12 @@ public class LevelData : ScriptableObject
 public class Level
 {
     public GameObject map;
-    public Vector2 playerSpawnPosition;
-    public float timeLimit;
-    public int achivement;
+    public int moves;
     public bool isCompleted;
     public bool isPlayable;
 
     public void SetLevel(Level levelData)
     {
-        this.playerSpawnPosition = levelData.playerSpawnPosition;
-        this.timeLimit = levelData.timeLimit;
-        this.achivement = levelData.achivement;
         this.isCompleted = levelData.isCompleted;
         this.isPlayable = levelData.isPlayable;
     }

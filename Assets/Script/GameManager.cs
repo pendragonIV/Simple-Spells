@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,22 +19,27 @@ public class GameManager : MonoBehaviour
     }
 
     public SceneChanger sceneChanger;
-    //public GameScene gameScene;
+    public GameScene gameScene;
+    public Transform pointContainer;
 
     #region Game status
     private Level currentLevelData;
     private bool isGameWin = false;
     private bool isGameLose = false;
     private bool isGamePause = false;
-
-    [SerializeField]
-    public int achivement = 0;
-    private const int MAX_ACHIVE = 3;
+    private int moveLeft;
     #endregion
 
     private void Start()
     {
         currentLevelData = LevelManager.instance.levelData.GetLevelAt(LevelManager.instance.currentLevelIndex);
+
+        GameObject map = Instantiate(currentLevelData.map);
+        WaysManager.instance.SetContainer(map.transform.GetChild(0), map.transform.GetChild(1), map.transform.GetChild(2));
+        pointContainer = map.transform.GetChild(0);
+
+        moveLeft = currentLevelData.moves;
+        gameScene.SetMove(moveLeft);
 
         Time.timeScale = 1;
     }
@@ -44,32 +50,35 @@ public class GameManager : MonoBehaviour
         {
             if (LevelManager.instance.levelData.GetLevelAt(LevelManager.instance.currentLevelIndex + 1).isPlayable == false)
             {
-                LevelManager.instance.levelData.SetLevelData(LevelManager.instance.currentLevelIndex + 1, true, false, 0);
+                LevelManager.instance.levelData.SetLevelData(LevelManager.instance.currentLevelIndex + 1, true, false);
             }
         }
-        SetAchivement();
-        if (achivement > LevelManager.instance.levelData.GetLevelAt(LevelManager.instance.currentLevelIndex).achivement)
-        {
-            LevelManager.instance.levelData.SetLevelData(LevelManager.instance.currentLevelIndex, true, true, achivement);
-        }
-
         isGameWin = true;
-
-        //gameScene.ShowWinPanel();
-        Time.timeScale = 0;
+        StartCoroutine(WaitToWin());
         LevelManager.instance.levelData.SaveDataJSON();
     }
 
-    private void SetAchivement()
+    private IEnumerator WaitToWin()
     {
-        
+        yield return new WaitForSecondsRealtime(.5f);
+        gameScene.ShowWinPanel();
     }
 
     public void Lose()
     {
         isGameLose = true;
-        //gameScene.ShowLosePanel();
+        gameScene.ShowLosePanel();
         Time.timeScale = 0;
+    }
+
+    public void DecreaseMoveLeft()
+    {
+        moveLeft--;
+        gameScene.SetMove(moveLeft);
+        if (moveLeft <= 0 && pointContainer.childCount > 3)
+        {
+            Lose();
+        }
     }
 
     public bool IsGameWin()

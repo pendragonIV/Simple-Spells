@@ -23,7 +23,7 @@ public class LevelHolder : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         LevelManager.instance.currentLevelIndex = int.Parse(this.gameObject.name);
-        //ChangeToGameScene();
+        ChangeToGameScene();
     }
 
     public void DisableHolder()
