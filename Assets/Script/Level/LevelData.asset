@@ -34,22 +34,22 @@ MonoBehaviour:
     isCompleted: 0
     isPlayable: 1
   - map: {fileID: 8681581088812449235, guid: 440574bfaec514344b648814fe032180, type: 3}
-    moves: 0
+    moves: 6
     isCompleted: 0
     isPlayable: 1
   - map: {fileID: 3170652447214469139, guid: a2e8c8ddcb8a06040a5d407e2e015820, type: 3}
-    moves: 0
+    moves: 10
     isCompleted: 0
-    isPlayable: 0
+    isPlayable: 1
   - map: {fileID: 3070183097729303564, guid: 0b0e6cea093e54d45be48d18d6ed9141, type: 3}
-    moves: 0
+    moves: 6
     isCompleted: 0
-    isPlayable: 0
+    isPlayable: 1
   - map: {fileID: 7906128017105327310, guid: a2bc2b6486ecc3c41927c384123d9888, type: 3}
-    moves: 0
+    moves: 9
     isCompleted: 0
-    isPlayable: 0
+    isPlayable: 1
   - map: {fileID: 3195419683867131109, guid: 7f968252388faec4cbec67191449c232, type: 3}
-    moves: 0
+    moves: 7
     isCompleted: 0
-    isPlayable: 0
+    isPlayable: 1

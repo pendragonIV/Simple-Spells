@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
     private bool isGameWin = false;
     private bool isGameLose = false;
     private bool isGamePause = false;
+    private bool isCanPress = true;
     private int moveLeft;
     #endregion
 
@@ -67,8 +69,13 @@ public class GameManager : MonoBehaviour
     public void Lose()
     {
         isGameLose = true;
+        StartCoroutine(WaitToLose());
+    }
+
+    private IEnumerator WaitToLose()
+    {
+        yield return new WaitForSecondsRealtime(.5f);
         gameScene.ShowLosePanel();
-        Time.timeScale = 0;
     }
 
     public void DecreaseMoveLeft()
@@ -106,6 +113,21 @@ public class GameManager : MonoBehaviour
     public bool IsGamePause()
     {
         return isGamePause;
+    }
+
+    public void DisablePress()
+    {
+        isCanPress = false;
+    }
+
+    public void EnablePress()
+    {
+        isCanPress = true;
+    }
+
+    public bool IsCanPress()
+    {
+        return isCanPress;
     }
 }
 

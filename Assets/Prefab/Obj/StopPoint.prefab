@@ -99,7 +99,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linkedNodes: []
-  points: []
   healthBar: {fileID: 3327105086189552524}
   health: 0
 --- !u!114 &461286532699879055
@@ -263,7 +262,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 6
   m_TargetDisplay: 0
 --- !u!114 &1260712462126946451
 MonoBehaviour:

@@ -30,6 +30,17 @@ public class GameScene : MonoBehaviour
     [SerializeField]
     private Transform nextBtn;
 
+    [SerializeField]
+    private Animator charAnimator;
+
+    public void PlayCharAnimation()
+    {
+        if (charAnimator != null)
+        {
+            charAnimator.Play("char", -1, 0f);
+        }
+    }
+
     public void SetMove(int move)
     {
         moveLeft.text = move.ToString();

@@ -64,6 +64,11 @@ public class WaysManager : MonoBehaviour
         }
     }
 
+    public int GetNumberOfStars()
+    {
+        return starsContainer.childCount;
+    }
+
     public void SpawnWay(Vector2 spawnPosition, Vector2 linkedNodePosition)
     {
         GameObject newWay = Instantiate(wayPrefab, waysContainer); 

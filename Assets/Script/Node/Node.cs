@@ -10,8 +10,8 @@ public class Node : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] linkedNodes;
-    [SerializeField]
-    List<GameObject> points = new List<GameObject>();
+    private List<GameObject> points = new List<GameObject>();
+    private List<GameObject> stars = new List<GameObject>();
     [SerializeField]
     private Transform healthBar;
     [SerializeField]
@@ -21,6 +21,27 @@ public class Node : MonoBehaviour
     {
         SetHealth();
     }
+
+    private void OnMouseDown()
+    {
+        if (CastRay().CompareTag("Star")
+            || GameManager.instance.IsGameWin()
+            || GameManager.instance.IsGameLose()
+            || !GameManager.instance.IsCanPress())
+        {
+            return;
+        }
+        points.Clear();
+        stars.Clear();
+        CheckStarAround();
+        GameManager.instance.gameScene.PlayCharAnimation();
+        GameManager.instance.DecreaseMoveLeft();
+        StarsManager(stars);
+
+        GameManager.instance.DisablePress();
+    }
+
+    #region Health
 
     public void DecreaseHealth()
     {
@@ -48,6 +69,10 @@ public class Node : MonoBehaviour
         return health;
     }
 
+    #endregion
+
+    #region Linked Nodes
+
     public GameObject[] GetLinkedNodes()
     {
         return linkedNodes;
@@ -58,40 +83,20 @@ public class Node : MonoBehaviour
         return linkedNodes.Contains(node);
     }
 
-    private void OnMouseDown()
-    {
-        if (CastRay().CompareTag("Star"))
-        {
-            return;
-        }
-        points.Clear();
-        List<GameObject> stars = new List<GameObject>();
+    #endregion
 
+    private void CheckStarAround()
+    {
         foreach (Direction direction in Enum.GetValues(typeof(Direction)))
         {
             Vector3Int dir = GridCellManager.instance.GetDirection(direction);
             Vector3Int startPos = GridCellManager.instance.GetObjCell(transform.position);
             GameObject star = StarDetector(startPos, dir);
-            if(star != null)
+            if (star != null)
             {
                 stars.Add(star);
             }
         }
-        //GameManager.instance.DecreaseMoveLeft();
-
-        StarsManager(stars);
-    }
-
-    private GameObject CastRay()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
-        if (hit.collider != null)
-        {
-            return hit.collider.gameObject;
-        }
-
-        return null;
     }
 
     private void StarsManager(List<GameObject> stars)
@@ -134,24 +139,30 @@ public class Node : MonoBehaviour
         {
             point.GetComponent<Node>().DecreaseHealth();
         }
-
-        if (WaysManager.instance.GetNumberOfPoints() == 3)
+        //This will be used when the game is finished
+        if (WaysManager.instance.GetNumberOfPoints() == WaysManager.instance.GetNumberOfStars() + 1)
         {
             WaysManager.instance.RemovePoint(point);
             Destroy(point);
         }
     }
 
+    #region Movement
+
     private void StarMoveBack(GameObject star)
     {
         Vector3 defaultPos = star.transform.position;
 
         star.GetComponent<Collider2D>().enabled = false;
+        Vector3 moveTo = transform.position;
+        moveTo.z = -5;
+        defaultPos.z = -5;
         star.transform.DOMove(transform.position, 0.5f).OnComplete(() =>
         {
             star.transform.DOMove(defaultPos, 0.5f).OnComplete(() =>
             {
                 star.GetComponent<Collider2D>().enabled = true;
+                GameManager.instance.EnablePress();
             });
             star.transform.DORotate(new Vector3(0, 0, 0), 0.5f, RotateMode.FastBeyond360);
         });
@@ -161,12 +172,17 @@ public class Node : MonoBehaviour
     private void MoveStar(GameObject star)
     {
         star.GetComponent<Collider2D>().enabled = false;
-        star.transform.DOMove(transform.position, 0.5f).OnComplete(() =>
+        Vector3 moveTo = transform.position;
+        moveTo.z = -5;
+        star.transform.DOMove(moveTo, 0.5f).OnComplete(() =>
         {
             star.GetComponent<Collider2D>().enabled = true;
+            GameManager.instance.EnablePress();
         });
         star.transform.DORotate(new Vector3(0, 0, 360), 0.5f, RotateMode.FastBeyond360);
     }
+
+    #endregion
 
     private GameObject StarDetector(Vector3Int startPos, Vector3Int direction)
     {
@@ -209,16 +225,20 @@ public class Node : MonoBehaviour
         return null;
     }
 
-
+    #region Checking
     public bool IsStarNearBy(Vector3 positionToCheck)
     {
         Vector3Int cellPos = GridCellManager.instance.GetObjCell(positionToCheck);
+
         foreach (Direction direction in Enum.GetValues(typeof(Direction)))
         {
             Vector3Int dir = GridCellManager.instance.GetDirection(direction);
-            Vector3Int checkPos = cellPos;
-
-            Collider2D collider2D = Physics2D.OverlapPoint(GridCellManager.instance.PositonToMove(checkPos + dir));
+            Vector3Int checkPos = cellPos + dir;
+            if(!CheckLinkedNode(cellPos, checkPos))
+            {
+                continue;
+            }
+            Collider2D collider2D = Physics2D.OverlapPoint(GridCellManager.instance.PositonToMove(checkPos));
             if (collider2D != null && collider2D.gameObject.CompareTag("Star"))
             {
                 return true;
@@ -265,4 +285,16 @@ public class Node : MonoBehaviour
         return false;
     }
 
+    private GameObject CastRay()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+        if (hit.collider != null)
+        {
+            return hit.collider.gameObject;
+        }
+
+        return null;
+    }
+    #endregion
 }
