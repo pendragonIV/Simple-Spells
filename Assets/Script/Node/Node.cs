@@ -31,14 +31,13 @@ public class Node : MonoBehaviour
         {
             return;
         }
+        GameManager.instance.DisablePress();
         points.Clear();
         stars.Clear();
         CheckStarAround();
         GameManager.instance.gameScene.PlayCharAnimation();
         GameManager.instance.DecreaseMoveLeft();
         StarsManager(stars);
-
-        GameManager.instance.DisablePress();
     }
 
     #region Health
@@ -125,6 +124,10 @@ public class Node : MonoBehaviour
             {
                 PointHealthManager(points[i]);
             }
+        }
+        else
+        {
+            GameManager.instance.EnablePress();
         }
     }
 

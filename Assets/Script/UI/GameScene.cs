@@ -33,6 +33,14 @@ public class GameScene : MonoBehaviour
     [SerializeField]
     private Animator charAnimator;
 
+    [SerializeField]
+    private Text levelText;
+
+    private void Start()
+    {
+        levelText.text = "Level " + (LevelManager.instance.currentLevelIndex + 1);
+    }
+
     public void PlayCharAnimation()
     {
         if (charAnimator != null)
